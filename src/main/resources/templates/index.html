@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Music Player</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+
+    body {
+      padding: 20px;
+      font-family: Arial, sans-serif;
+      background-image:
+              url("https://i.pinimg.com/originals/9b/53/36/9b533610afe276cce783a0c52fb959ad.png");
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+
+    h1 {
+      margin-bottom: 30px;
+    }
+
+    .song-table {
+      margin-top: 30px;
+    }
+
+    .song-table th,
+    .song-table td {
+      vertical-align: middle;
+    }
+
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1 class="text-center"><svg xmlns="http://www.w3.org/2000/svg" width="2rem" height="2rem" fill="currentColor" class="bi bi-music-note-list" viewBox="0 0 16 16">
+    <path d="M12 13c0 1.105-1.12 2-2.5 2S7 14.105 7 13s1.12-2 2.5-2 2.5.895 2.5 2z"/>
+    <path fill-rule="evenodd" d="M12 3v10h-1V3h1z"/>
+    <path d="M11 2.82a1 1 0 0 1 .804-.98l3-.6A1 1 0 0 1 16 2.22V4l-5 1V2.82z"/>
+    <path fill-rule="evenodd" d="M0 11.5a.5.5 0 0 1 .5-.5H4a.5.5 0 0 1 0 1H.5a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 .5 7H8a.5.5 0 0 1 0 1H.5a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 .5 3H8a.5.5 0 0 1 0 1H.5a.5.5 0 0 1-.5-.5z"/>
+  </svg>     MUSIC PLAYER     <svg xmlns="http://www.w3.org/2000/svg" width="2rem" height="2rem" fill="currentColor" class="bi bi-music-note-list" viewBox="0 0 16 16">
+    <path d="M12 13c0 1.105-1.12 2-2.5 2S7 14.105 7 13s1.12-2 2.5-2 2.5.895 2.5 2z"/>
+    <path fill-rule="evenodd" d="M12 3v10h-1V3h1z"/>
+    <path d="M11 2.82a1 1 0 0 1 .804-.98l3-.6A1 1 0 0 1 16 2.22V4l-5 1V2.82z"/>
+    <path fill-rule="evenodd" d="M0 11.5a.5.5 0 0 1 .5-.5H4a.5.5 0 0 1 0 1H.5a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 .5 7H8a.5.5 0 0 1 0 1H.5a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 .5 3H8a.5.5 0 0 1 0 1H.5a.5.5 0 0 1-.5-.5z"/>
+  </svg></h1>
+
+  <h2>Tải bài hát lên</h2>
+  <label for="songFile">Chọn một bài hát:</label>
+  <table>
+    <tbody>
+    <tr>
+      <td>
+        <form th:action="@{/upload}" method="post" enctype="multipart/form-data">
+          <div class="form-group">
+            <input type="file" class="form-control-file" id="songFile" name="file">
+          </div>
+          <div class="text-center">
+            <button type="submit" class="btn btn-outline-primary">Tải lên</button>
+          </div>
+        </form>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+  <hr>
+  <h2>Danh sách bài hát</h2>
+  <table class="table song-table">
+    <thead>
+    <tr>
+      <th>Tên bài hát</th>
+      <th colspan="2">Phát</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="song : ${songs}">
+      <td th:text="${song.name}"></td>
+      <td>
+        <audio controls>
+          <source th:src="@{'/music/' + ${song.filename}}" th:type="'audio/mpeg'">
+          Trình duyệt của bạn không hỗ trợ phát nhạc trực tuyến.
+        </audio>
+      </td>
+      <td>
+        <a class="btn btn-outline-danger" th:href="@{'/delete/' + ${song.filename}}" role="button">
+          <svg xmlns="http://www.w3.org/2000/svg" width="1.2rem" height="1.2rem" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
+            <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
+          </svg>
+        </a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
